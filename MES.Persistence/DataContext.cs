@@ -26,12 +26,6 @@ namespace MES.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Operation>()
-                .HasKey(o => new
-                {
-                    o.WorkOrderId,
-                    o.OperationId
-                });
             modelBuilder.Entity<Equipment>()
                 .HasOne(e => e.ParentEquipment)
                 .WithMany(e => e.ChildrenEquipment)
@@ -39,10 +33,6 @@ namespace MES.Persistence
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<MaterialDefinition> MaterialDefinitions { get; set; }
-        public DbSet<WorkOrder> WorkOrders { get; set; }
-        public DbSet<Operation> Operations { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
-
     }
 }
