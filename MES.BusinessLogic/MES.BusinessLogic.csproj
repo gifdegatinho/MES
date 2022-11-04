@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AtomosHyla.Core.Library\AtomosHyla.Core.Library.csproj" />
+    <ProjectReference Include="..\MES.BusinessLogic.Library\MES.BusinessLogic.Library.csproj" />
+    <ProjectReference Include="..\MES.Model\MES.Model.csproj" />
+    <ProjectReference Include="..\MES.Persistence\MES.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
