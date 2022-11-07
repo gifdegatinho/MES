@@ -11,8 +11,4 @@
     <ProjectReference Include="..\MES.Persistence\MES.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Actions\" />
-  </ItemGroup>
-
 </Project>

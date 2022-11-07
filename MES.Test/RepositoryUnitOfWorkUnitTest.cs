@@ -6,18 +6,16 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MES.Model;
-using MES.BusinessLogic.Library.Requests;
-using MES.BusinessLogic.Actions;
 
 namespace MES.Test
 {
     [TestClass]
-    public class ActionsUnitTest
+    public class RepositoryUnitOfWorkUnitTest
     {
         public IServiceProvider ServiceProvider { get; }
         public UnitOfWork UnitOfWork { get; }
 
-        public ActionsUnitTest()
+        public RepositoryUnitOfWorkUnitTest()
         {
             string loggerConfig = "log.config";
             NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(loggerConfig);
@@ -40,20 +38,16 @@ namespace MES.Test
         public void AddMaterialTest()
         {
             var beforeCount = UnitOfWork.Materials.GetAll().Count();
-            var request = new AddMaterialRequest()
+            UnitOfWork.Materials.Add(new Material()
             {
                 MaterialId = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
                 Color = Guid.NewGuid().ToString(),
-            };
-
-            var action = new AddMaterialAction(request);
-            var response = action.Execute().Result;
-
+            });
+            UnitOfWork.Save();
             var afterCount = UnitOfWork.Materials.GetAll().Count();
 
             Assert.IsTrue(afterCount == beforeCount + 1, "Row was not inserted");
-            Assert.IsTrue(response.Succeeded, "Row was not inserted");
         }
     }
 }
