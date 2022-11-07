@@ -30,9 +30,14 @@ namespace MES.Persistence
                 .HasOne(e => e.ParentEquipment)
                 .WithMany(e => e.ChildrenEquipment)
                 .HasForeignKey(e => e.ParentEquipmentId);
+            modelBuilder.Entity<Operation>()
+                .HasKey(o => new { o.WorkOrderId, o.OperationId });
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Equipment> Equipments { get; set; }
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<WorkOrder> WorkOrders { get; set; }
+        public DbSet<Operation> Operations { get; set; }
     }
 }

@@ -40,8 +40,8 @@
       <FileName>Operation.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="WorkOrder" />
       <Property Name="Equipment" />
+      <Property Name="WorkOrder" />
     </ShowAsAssociation>
   </Class>
   <Class Name="MES.Model.WorkOrder">

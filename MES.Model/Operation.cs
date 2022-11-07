@@ -6,11 +6,11 @@ namespace MES.Model
     public class Operation
     {
         [Key, MaxLength(50)]
+        public string WorkOrderId { get; set; }
+        [Key, MaxLength(50)]
         public string OperationId { get; set; }
         [Required, MaxLength(50)]
         public string EquipmentId { get; set; }
-        [Required, MaxLength(50)]
-        public string WorkOrderId { get; set; }
         public DateTimeOffset? ScheduledStartDate { get; set; }
         public DateTimeOffset? ScheduledEndDate { get; set; }
         public DateTimeOffset? ActualStartDate { get; set; }
