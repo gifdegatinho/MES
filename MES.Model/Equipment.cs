@@ -13,5 +13,6 @@ namespace MES.Model
         public string ParentEquipmentId { get; set; }
         public Equipment ParentEquipment { get; set; }
         public IEnumerable<Equipment> ChildrenEquipment { get; set; }
+        public IEnumerable<Operation> Operations { get; set; }
     }
 }
