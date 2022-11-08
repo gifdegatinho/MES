@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MES.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace MES.Test
 {
@@ -48,6 +49,69 @@ namespace MES.Test
             var afterCount = UnitOfWork.Materials.GetAll().Count();
 
             Assert.IsTrue(afterCount == beforeCount + 1, "Row was not inserted");
+        }
+
+        [TestMethod]
+        public void GetAllMaterialsTest()
+        {
+            var materials = UnitOfWork.Materials.GetAll().ToList();
+        }
+
+        [TestMethod]
+        public void ModifyMaterialTest()
+        {
+            var material = UnitOfWork.Materials.GetAll().FirstOrDefault();
+
+            if (material == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                material.Description = Guid.NewGuid().ToString();
+                material.Color = Guid.NewGuid().ToString();
+                UnitOfWork.Save();
+            }
+        }
+
+        [TestMethod]
+        public void DeleteMaterialTest()
+        {
+            var material = UnitOfWork.Materials.GetAll().FirstOrDefault();
+
+            if (material == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var beforeCount = UnitOfWork.Materials.GetAll().Count();
+
+                UnitOfWork.Materials.Delete(material);
+                UnitOfWork.Save();
+           
+                var afterCount = UnitOfWork.Materials.GetAll().Count();
+
+                Assert.IsTrue(afterCount == beforeCount - 1, "Row was not deleted");
+            }
+        }
+
+
+        [TestMethod]
+        public void GetMaterialTest()
+        {
+            var firstMaterial = UnitOfWork.Materials.GetAll().FirstOrDefault();
+
+            if (firstMaterial == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var material = UnitOfWork.Materials.Get(firstMaterial.MaterialId);
+
+                Assert.IsNotNull(material);
+            }
         }
     }
 }
