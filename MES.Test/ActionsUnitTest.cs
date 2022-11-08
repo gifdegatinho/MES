@@ -55,5 +55,78 @@ namespace MES.Test
             Assert.IsTrue(afterCount == beforeCount + 1, "Row was not inserted");
             Assert.IsTrue(response.Succeeded, "Row was not inserted");
         }
+
+        [TestMethod]
+        public void ModifyMaterialTest()
+        {
+            var material = UnitOfWork.Materials.GetAll().FirstOrDefault();
+
+            if (material == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var request = new ModifyMaterialRequest()
+                {
+                    MaterialId = material.MaterialId,
+                    Description = Guid.NewGuid().ToString(),
+                    Color = Guid.NewGuid().ToString(),
+                };
+
+                var action = new ModifyMaterialAction(request);
+                var response = action.Execute().Result;
+
+                Assert.IsTrue(response.Succeeded, "Row was not modified");
+            }
+        }
+
+        [TestMethod]
+        public void DeleteMaterialTest()
+        {
+            var material = UnitOfWork.Materials.GetAll().FirstOrDefault();
+
+            if (material == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var beforeCount = UnitOfWork.Materials.GetAll().Count();
+                var request = new DeleteMaterialRequest()
+                {
+                    MaterialId = material.MaterialId
+                };
+                var action = new DeleteMaterialAction(request);
+                var response = action.Execute().Result;
+
+                Assert.IsTrue(response.Succeeded, "Row was not deleted");
+
+                var afterCount = UnitOfWork.Materials.GetAll().Count();
+
+                Assert.IsTrue(afterCount == beforeCount - 1, "Row was not deleted");
+            }
+        }
+
+        [TestMethod]
+        public void GetAllMaterialsTest()
+        {
+            var request = new GetAllMaterialsRequest()
+            {
+                PageSize = 3,
+                Page = 0,
+                SearchString = "Action"
+            };
+            var action = new GetAllMaterialsAction(request);
+            var response = action.Execute().Result;
+
+
+            foreach (var material in response.Materials)
+            {
+                Console.WriteLine($"Material id: {material.MaterialId}, Description: {material.Description}, Color: {material.Color}");
+            }
+
+            Assert.IsTrue(response.Succeeded, response.Exception?.Message);
+        }
     }
 }

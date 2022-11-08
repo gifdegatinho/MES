@@ -1,5 +1,6 @@
 ﻿using AtomosHyla.Core;
 using MES.Model;
+using System;
 
 namespace MES.Persistence.Repositories
 {
@@ -7,6 +8,11 @@ namespace MES.Persistence.Repositories
     {
         public MaterialRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
+        }
+
+        public object Delete(string materialId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
