@@ -11,11 +11,11 @@ namespace MES.Persistence
 			Equipments = new EquipmentRepository(this);
 			Materials = new MaterialRepository(this);
 			WorkOrders = new WorkOrderRepository(this);
-			Operations = new WorkOrderRepository(this);
+			Operations = new OperationRepository(this);
         }
         public EquipmentRepository Equipments { get; }
 		public MaterialRepository Materials { get; }
 		public WorkOrderRepository WorkOrders { get; }
-		public WorkOrderRepository Operations { get; }
+		public OperationRepository Operations { get; }
 	}
 }

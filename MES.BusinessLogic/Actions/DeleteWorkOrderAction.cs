@@ -9,18 +9,16 @@ using System.Threading.Tasks;
 
 namespace MES.BusinessLogic.Actions
 {
-    public class ModifyEquipmentAction : ActionBase<ModifyEquipmentRequest, ModifyEquipmentResponse>
+    public class DeleteWorkOrderAction : ActionBase<DeleteWorkOrderRequest, DeleteWorkOrderResponse>
     {
-        public ModifyEquipmentAction(ModifyEquipmentRequest request) : base(request)
+        public DeleteWorkOrderAction(DeleteWorkOrderRequest request) : base(request)
         {
-
         }
 
         public override Task DoExecute()
         {
-            var equipment = UnitOfWork.Equipments.Get(Request.EquipmentId);
-            equipment.Description = Request.Description;
-            equipment.ParentEquipmentId = Request.ParentEquipmentId;
+            var workOrder = UnitOfWork.WorkOrders.Get(Request.WorkOrderId);
+            UnitOfWork.WorkOrders.Delete(workOrder);
 
             return Task.CompletedTask;
         }

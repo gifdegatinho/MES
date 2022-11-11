@@ -8,6 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MES.BusinessLogic.Library.Requests;
 using MES.BusinessLogic.Actions;
 using Microsoft.EntityFrameworkCore;
+using MES.Model;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
 namespace MES.Test
 {
@@ -202,7 +204,7 @@ namespace MES.Test
                 Assert.IsTrue(response.Succeeded, response.Exception?.Message);
             }
         }
-
+/*
         [TestMethod]
         public void DeleteEquipmentTest()
         {
@@ -230,7 +232,7 @@ namespace MES.Test
 
                 Assert.IsTrue(response.Succeeded, response.Exception?.Message);
             }
-        }
+        }*/
 
         [TestMethod]
         public void GetAllEquipmentsTest()
@@ -275,6 +277,115 @@ namespace MES.Test
                 {
                     Console.WriteLine($"Equipment id: {equipment.EquipmentId}, Description: {equipment.Description}");
                 }
+            }
+        }
+
+        [TestMethod]
+        public void AddWorkOrderTest()
+        {
+            var beforeCount = UnitOfWork.WorkOrders.GetAll().Count();
+            var material = UnitOfWork.Materials.GetAll().FirstOrDefault();
+            var equipments = UnitOfWork.Equipments.GetAll().Take(3).ToList();
+
+            if (material == null || equipments.Count != 3)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var request = new AddWorkOrderRequest()
+                {
+                    WorkOrderId = Guid.NewGuid().ToString(),
+                    MaterialId = material!.MaterialId,
+                    Quantity = 1
+                };
+
+                for (int i = 0; i < 3; i++)
+                {
+                    request.Operations.Add(new Operation()
+                    {
+                        WorkOrderId = request.WorkOrderId,
+                        OperationId = ((i + 1) * 10).ToString(),
+                        EquipmentId = equipments[i].EquipmentId,
+                        Duration = TimeSpan.FromMinutes(15)
+                    });
+                }
+                var action = new AddWorkOrderAction(request);
+                var response = action.Execute().Result;
+
+                var afterCount = UnitOfWork.WorkOrders.GetAll().Count();
+                Assert.IsTrue(afterCount == beforeCount + 1, "Row was not inserted");
+
+                Assert.IsTrue(response.Succeeded, response.Exception?.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ModifyWorkOrderTest()
+        {
+            AddWorkOrderTest();
+            
+            var workOrder = UnitOfWork.WorkOrders.GetAll().FirstOrDefault();
+            var material = UnitOfWork.Materials.GetAll().FirstOrDefault();
+            var equipments = UnitOfWork.Equipments.GetAll().Take(4).ToList();
+
+            if (workOrder == null || material == null || equipments.Count != 4)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var request = new ModifyWorkOrderRequest()
+                {
+                    WorkOrderId = workOrder.WorkOrderId,
+                    MaterialId = material.MaterialId,
+                    Quantity = workOrder.Quantity + 1,
+                };
+
+
+                for (int i = 0; i < 4; i++)
+                {
+                    request.Operations.Add(new Operation()
+                    {
+                        WorkOrderId = request.WorkOrderId,
+                        OperationId = ((i + 1) * 10).ToString(),
+                        EquipmentId = equipments[i].EquipmentId,
+                        Duration = TimeSpan.FromMinutes(20)
+                    });
+                }
+
+                var action = new ModifyWorkOrderAction(request);
+                var response = action.Execute().Result;
+
+                Assert.IsTrue(response.Succeeded, response.Exception?.Message);
+            }
+        }
+
+        [TestMethod]
+        public void DeleteWorkOrderTest()
+        {
+            AddWorkOrderTest();
+
+            var workOrder = UnitOfWork.WorkOrders.GetAll().FirstOrDefault();
+
+            if (workOrder == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                var beforeCount = UnitOfWork.WorkOrders.GetAll().Count();
+                var request = new DeleteWorkOrderRequest()
+                {
+                    WorkOrderId = workOrder.WorkOrderId,
+                };
+                var action = new DeleteWorkOrderAction(request);
+                var response = action.Execute().Result;
+
+                var afterCount = UnitOfWork.WorkOrders.GetAll().Count();
+                Assert.IsTrue(afterCount == beforeCount - 1, "Row was not deleted");
+
+                Assert.IsTrue(response.Succeeded, response.Exception?.Message);
             }
         }
     }

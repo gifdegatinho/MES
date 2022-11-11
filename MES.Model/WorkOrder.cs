@@ -13,6 +13,6 @@ namespace MES.Model
         [Required]
         public double Quantity { get; set; }
         public Material Material { get; set; }
-        public IEnumerable<Operation> Operations { get; set; }
+        public List<Operation> Operations { get; set; }
     }
 }

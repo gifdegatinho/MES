@@ -24,7 +24,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="MES.Model.Material">
-    <Position X="10.25" Y="4.25" Width="1.5" />
+    <Position X="10.25" Y="4.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgQAAACAQAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Material.cs</FileName>
